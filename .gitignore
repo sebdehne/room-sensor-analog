@@ -1,0 +1,12 @@
+*.err
+*.lst
+*.o
+*.cof
+*.hex
+*.map
+*.mcp
+*.mcs
+*.mcw
+*.DBK
+*.DSN
+*.PWI
