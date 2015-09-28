@@ -6,7 +6,7 @@
 	__CONFIG       _CP_OFF & _CPD_OFF & _WDT_OFF & _BOR_OFF & _PWRTE_ON & _INTRC_OSC_NOCLKOUT  & _MCLRE_OFF & _FCMEN_OFF & _IESO_OFF
 	
 	udata
-Values			res	7 ; 7 for new, 5 for old
+Values			res	5 
 DelayCounter1	res	1
 DelayCounter2	res	1
 DelayCounter3	res	1
@@ -114,8 +114,6 @@ _init
 	clrf	Values+2	; humidity-low
 	clrf	Values+3	; humidity-high
 	clrf	Values+4	; counter
-	clrf	Values+5	; light-low
-	clrf	Values+6	; light-ligh
 	banksel	Counter
 	clrf	Counter
 
@@ -160,15 +158,15 @@ _main
 	banksel	Values
 	movwf	Values+4
 
-	; measure the ligh intensity now
-	call	ReadLightSensor
+	; measure the ligh intensity now (only from rev 5)
+	; call	ReadLightSensor
 
 	; Load the value's location and send the msg
 	movlw	HIGH	Values
 	movwf	MsgAddr
 	movlw	LOW		Values
 	movwf	MsgAddr+1
-	movlw	.7
+	movlw	.5
 	movwf	MsgLen
 	; and transmit the data now
 	call	RF_TX_SendMsg
