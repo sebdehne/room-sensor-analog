@@ -6,7 +6,7 @@
 	__CONFIG       _CP_OFF & _CPD_OFF & _WDT_OFF & _BOR_OFF & _PWRTE_ON & _INTRC_OSC_NOCLKOUT  & _MCLRE_OFF & _FCMEN_OFF & _IESO_OFF
 	
 	udata
-Values			res	7 ; 7 for new, 5 for old
+Values			res	9
 DelayCounter1	res	1
 DelayCounter2	res	1
 DelayCounter3	res	1
@@ -116,6 +116,8 @@ _init
 	clrf	Values+4	; counter
 	clrf	Values+5	; light-low
 	clrf	Values+6	; light-ligh
+	clrf	Values+7	; battery-low
+	clrf	Values+8	; battery-ligh
 	banksel	Counter
 	clrf	Counter
 
@@ -163,17 +165,41 @@ _main
 	; measure the ligh intensity now
 	call	ReadLightSensor
 
+    ; measure battery voltage
+    call	ReadBatteryVoltage
+
 	; Load the value's location and send the msg
 	movlw	HIGH	Values
 	movwf	MsgAddr
 	movlw	LOW		Values
 	movwf	MsgAddr+1
-	movlw	.7
+	movlw	.9
 	movwf	MsgLen
 	; and transmit the data now
 	call	RF_TX_SendMsg
 
 	goto	_main
+
+
+ReadBatteryVoltage
+	; BEGIN A/D conversation
+	BANKSEL ADCON0 ;
+	MOVLW 	B'10110101' ;Right justify,
+	MOVWF 	ADCON0 		; Vdd Vref, 0.6V-Ref, On
+	call	Delay_1ms
+	BSF 	ADCON0,GO ;Start conversion
+	BTFSC 	ADCON0,GO ;Is conversion done?
+	GOTO 	$-1       ;No, test again
+	; END A/D conversation
+	BANKSEL ADRESH
+	movfw	ADRESH
+	BANKSEL Values
+	movwf	Values+8
+	BANKSEL ADRESL
+	movfw	ADRESL
+	BANKSEL Values
+	movwf	Values+7
+	return
 
 ReadLightSensor
 	bsf		PORTB, 5; enable light sensor
