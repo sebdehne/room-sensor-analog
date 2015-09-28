@@ -78,7 +78,7 @@ _init
 	clrf	ANSELH			; all digital
 	BSF 	ANSEL,  0       ; Set AN0 to analog  (RA1)
 	BSF 	ANSEL,  1       ; Set AN1 to analog  (RA0)
-	BSF		ANSELH, 2		; Set AN10 to analog (RB4)
+	;BSF	ANSELH, 2		; Set AN10 to analog (RB4)
 
 	; Configure port A
 	BANKSEL TRISA
@@ -89,7 +89,7 @@ _init
 	; Configure port B
 	BANKSEL	TRISB
 	clrf	TRISB			; output all
-	BSF		TRISB, 4       	; input: AN10 / RB5 ; only on new boards
+	;BSF	TRISB, 4       	; input: AN10 / RB5 ; only on new boards
 	
 	; Set entire portC as output
 	BANKSEL	TRISC

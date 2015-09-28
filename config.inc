@@ -40,7 +40,7 @@
 ;***************************************
 ; Values required by rf_protocol.asm
 ;***************************************
-#define	RF_TX_PORT		PORTB, 6 ; 4 on old boards, 6 on new boards
+#define	RF_TX_PORT		PORTB, 4 ; 4 on old boards, 6 on new boards
 #define	RF_DST_ADDR		.1		; receiver has id 1
 #define	RF_SRC_ADDR		.8		; local addr
 
